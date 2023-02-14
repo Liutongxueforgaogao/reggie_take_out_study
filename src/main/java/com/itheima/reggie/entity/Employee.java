@@ -1,6 +1,7 @@
 package com.itheima.reggie.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.SqlCondition;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import java.io.Serializable;
@@ -10,14 +11,16 @@ import java.time.LocalDateTime;
  * 员工实体
  */
 @Data
-public class Employee implements Serializable {
+public class Employee extends Page implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
+    @TableField(value = "username",condition = SqlCondition.LIKE)
     private String username;
 
+    @TableField(value = "name",condition = SqlCondition.LIKE)
     private String name;
 
     private String password;

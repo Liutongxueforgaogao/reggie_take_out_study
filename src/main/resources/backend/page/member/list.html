@@ -20,20 +20,13 @@
   <div class="dashboard-container" id="member-app">
     <div class="container">
       <div class="tableBar">
-        <el-input
-          v-model="input"
-          placeholder="请输入员工姓名"
-          style="width: 250px"
-          clearable
-           @keyup.enter.native="handleQuery"
-        >
-          <i
-            slot="prefix"
-            class="el-input__icon el-icon-search"
-            style="cursor: pointer"
-            @click="handleQuery"
-          ></i>
+        <el-input v-model="employeeInfo.username" placeholder="请输入员工姓名" style="width: 250px" clearable @keyup.enter.native="handleQuery">
+          <i slot="prefix" class="el-input__icon el-icon-search" style="cursor: pointer" @click="handleQuery"></i>
         </el-input>
+        <el-input v-model="employeeInfo.name" placeholder="请输入账号" style="width: 250px" clearable @keyup.enter.native="handleQuery">
+          <i slot="prefix" class="el-input__icon el-icon-search" style="cursor: pointer" @click="handleQuery"></i>
+        </el-input>
+
         <el-button
           type="primary"
           @click="addMemberHandle('add')"
@@ -122,6 +115,10 @@
              tableData : [],
              id : '',
              status : '',
+             employeeInfo:{
+               username:'',
+               name:''
+             }
           }
         },
         computed: {},
@@ -139,7 +136,9 @@
             const params = {
               page: this.page,
               pageSize: this.pageSize,
-              name: this.input ? this.input : undefined
+              name:this.employeeInfo.name,
+              username: this.employeeInfo.username
+              // employee: this.employeeInfo ? this.employeeInfo : undefined
             }
             await getMemberList(params).then(res => {
               if (String(res.code) === '1') {
@@ -153,6 +152,7 @@
           handleQuery() {
             this.page = 1;
             this.init();
+            // console.log(this.employeeInfo)
           },
            // 添加
           addMemberHandle (st) {

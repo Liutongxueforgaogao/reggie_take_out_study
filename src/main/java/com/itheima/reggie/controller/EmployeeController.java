@@ -49,12 +49,12 @@ public class EmployeeController {
 
         //3、如果没有查询到则返回登录失败结果
         if(emp == null){
-            return R.error("登录失败");
+            return R.error("用户不存在");
         }
 
         //4、密码比对，如果不一致则返回登录失败结果
         if(!emp.getPassword().equals(password)){
-            return R.error("登录失败");
+            return R.error("密码错误，登录失败");
         }
 
         //5、查看员工状态，如果为已禁用状态，则返回员工已禁用结果
@@ -113,16 +113,20 @@ public class EmployeeController {
      * @return
      */
     @GetMapping("/page")
-    public R<Page> page(int page,int pageSize,String name){
-        log.info("page = {},pageSize = {},name = {}" ,page,pageSize,name);
+    public R<Page> page(Employee employee){
+        log.info("page = {},pageSize = {},name = {}" ,employee.getPage(),employee.getPageSize(),employee.getName());
 
         //构造分页构造器
-        Page pageInfo = new Page(page,pageSize);
+        Page pageInfo = new Page(employee.getPage(),employee.getPageSize());
 
         //构造条件构造器
         LambdaQueryWrapper<Employee> queryWrapper = new LambdaQueryWrapper();
+        //todo 通过实体类进行查询，属性有值才筛选
         //添加过滤条件
-        queryWrapper.like(StringUtils.isNotEmpty(name),Employee::getName,name);
+        queryWrapper.
+                like(StringUtils.isNotEmpty(employee.getName()),Employee::getName,employee.getName()).
+                like(StringUtils.isNotEmpty(employee.getUsername()),Employee::getUsername,employee.getUsername());
+
         //添加排序条件
         queryWrapper.orderByDesc(Employee::getUpdateTime);
 
